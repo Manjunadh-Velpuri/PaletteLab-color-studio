@@ -1,0 +1,188 @@
+// ========================================================================================
+// PALETTELAB UI THEME DEFINITIONS
+// ----------------------------------------------------------------------------------------
+// Consistent Order for each Theme:
+// "Palette Name, Background, Frame (Card), Border / Line, Accent (Button), Text"
+// ----------------------------------------------------------------------------------------
+// [
+//   "Palette Name",
+//   "Background",
+//   "Frame (Card)",
+//   "Border / Line",
+//   "Accent (Button)",
+//   "Text"
+// ]
+// ========================================================================================
+
+[
+  {
+    "category": "Minimalist Enterprise",
+    "themes": [
+      [
+        "Vercel Dark",
+        "#000000",
+        "#111111",
+        "#333333",
+        "#FFFFFF",
+        "#EDEDED"
+      ],
+      [
+        "GitHub Dimmed",
+        "#22272E",
+        "#2D333B",
+        "#444C56",
+        "#539BF5",
+        "#ADBAC7"
+      ],
+      [
+        "Slate & Blue",
+        "#0F172A",
+        "#1E293B",
+        "#334155",
+        "#3B82F6",
+        "#F8FAFC"
+      ],
+      [
+        "Arctic Clean (Light)",
+        "#F9FAFB",
+        "#FFFFFF",
+        "#E5E7EB",
+        "#2563EB",
+        "#111827"
+      ],
+      [
+        "Charcoal Mint",
+        "#121212",
+        "#1E1E1E",
+        "#2A2A2A",
+        "#10B981",
+        "#E0E0E0"
+      ],
+      [
+        "Nordic Night",
+        "#2E3440",
+        "#3B4252",
+        "#434C5E",
+        "#88C0D0",
+        "#ECEFF4"
+      ],
+      [
+        "Stripe UI (Light)",
+        "#F6F9FC",
+        "#FFFFFF",
+        "#E3E8EE",
+        "#635BFF",
+        "#425466"
+      ],
+      [
+        "Deep Ocean",
+        "#0B1121",
+        "#131A2B",
+        "#1F2937",
+        "#38BDF8",
+        "#F1F5F9"
+      ],
+      [
+        "Onyx & Gold",
+        "#18181B",
+        "#27272A",
+        "#3F3F46",
+        "#F59E0B",
+        "#FAFAFA"
+      ],
+      [
+        "Monochrome Pro",
+        "#1A1A1A",
+        "#242424",
+        "#333333",
+        "#E5E5E5",
+        "#FFFFFF"
+      ]
+    ]
+  },
+  {
+    "category": "Classy Beige & Tones",
+    "themes": [
+      [
+        "Taupe Minimalist (Light)",
+        "#EDE8E1",
+        "#F7F5F0",
+        "#DAD3C7",
+        "#967D6D",
+        "#24211E"
+      ],
+      [
+        "Warm Sand (Light)",
+        "#F4F1EA",
+        "#FAF8F5",
+        "#E6E1D8",
+        "#C87A5B",
+        "#2C2A29"
+      ],
+      [
+        "Latte Dark",
+        "#1E1B18",
+        "#282420",
+        "#38332C",
+        "#D4A373",
+        "#F3EED9"
+      ],
+      [
+        "Oatmeal & Olive",
+        "#191C1A",
+        "#222624",
+        "#313733",
+        "#8A9A86",
+        "#E8EBE4"
+      ],
+      [
+        "Cashmere (Light)",
+        "#EFECE6",
+        "#F9F8F6",
+        "#DDD8CE",
+        "#B38D84",
+        "#2B2625"
+      ],
+      [
+        "Mocha Slate",
+        "#1C1917",
+        "#262220",
+        "#36312D",
+        "#A88B7D",
+        "#EDE8E4"
+      ],
+      [
+        "Ivory Terracotta (Light)",
+        "#F6F3EE",
+        "#FFFFFF",
+        "#E8E2D8",
+        "#D96B43",
+        "#1C1917"
+      ],
+      [
+        "Desert Sage",
+        "#1D201D",
+        "#262B26",
+        "#373D37",
+        "#A3B19B",
+        "#ECEFEA"
+      ],
+      [
+        "Parchment & Ink (Light)",
+        "#EAE5D9",
+        "#F4F0E6",
+        "#D5CEBE",
+        "#3E4E50",
+        "#1B1D1E"
+      ],
+      [
+        "Roasted Pecan",
+        "#161311",
+        "#211D1A",
+        "#332D28",
+        "#C68B59",
+        "#F5EBE1"
+      ]
+    ]
+  }
+]
