@@ -96,9 +96,17 @@ Since I'm still learning, I want to keep improving this. Here are some ideas I h
 - **A contrast checker**: to see if text colors are accessible on background colors.
 - **More beautiful layouts**: for exporting palettes (like a moodboard style).
 - **Better mobile support**: so it looks nice on phones.
+---
+
+### Author 👨‍💻
+
+<a href="https://github.com/Manjunadh-Velpuri">
+  <img src="https://img.shields.io/badge/Manjunadh%20Velpuri-181717?style=for-the-badge&logo=github&logoColor=white" height="28" />
+</a>
+
+Built with ❤️ — feel free to reach out, open an issue, or contribute!
 
 ---
-By Manjunadh Velpuri ([@Manjunadh-Velpuri](https://github.com/Manjunadh-Velpuri))
 
 ## License 📄
 This project is under the [MIT License](LICENSE) — feel free to use it, learn from it, or build on it.
