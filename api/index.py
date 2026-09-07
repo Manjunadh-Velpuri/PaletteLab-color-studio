@@ -8,6 +8,7 @@ import os
 import io
 import json
 from starlette.responses import Response
+from starlette.staticfiles import StaticFiles
 
 # Ensure core_logic is resolvable
 sys.path.append(".")
@@ -31,6 +32,9 @@ app, rt = fast_app(
         Script(src="/static/js/interactions.js")
     )
 )
+
+if os.path.exists("static"):
+    app.mount("/static", StaticFiles(directory="static"), name="static")
 
 def get_sorted_colors(colors: list, sort_mode: str) -> list:
     """Sort colors based on the selected mode."""
