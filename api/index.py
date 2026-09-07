@@ -524,6 +524,6 @@ def export_svg(session):
         media_type="image/svg+xml", 
         headers={"Content-Disposition": f'attachment; filename="{filename}"'}
     )
-
+app = app
 if __name__ == "__main__":
     serve()
