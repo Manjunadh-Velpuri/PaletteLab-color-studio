@@ -26,7 +26,23 @@ def get_palette_dimensions(count: int) -> Tuple[int, int]:
 
 
 def get_github_icon(size: int = 24, fill_color: str = "#141722") -> Optional[Image.Image]:
-    """Load and render GitHub SVG icon to rasterized PIL Image with given fill color using PySide6 QSvgRenderer."""
+    """Load and render GitHub icon to rasterized PIL Image with given fill color using pure Pillow."""
+    icon_path = Path("static/icons/github.png")
+    if not icon_path.exists():
+        icon_path = Path(__file__).resolve().parent.parent.parent / "static" / "icons" / "github.png"
+    
+    if icon_path.exists():
+        try:
+            base_icon = Image.open(icon_path).convert("RGBA")
+            resized = base_icon.resize((size, size), Image.Resampling.LANCZOS)
+            r, g, b = rgb_from_hex(fill_color)
+            tinted = Image.new("RGBA", (size, size), (r, g, b, 255))
+            tinted.putalpha(resized.split()[3])
+            return tinted
+        except Exception as e:
+            print(f"Error loading github icon via Pillow: {e}")
+
+    # Fallback to PySide6 if available
     svg_data = f"""<svg viewBox="0 0 24 24" width="{size}" height="{size}">
 <path fill="{fill_color}" fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
 </svg>"""
@@ -148,8 +164,8 @@ def render_export_image(colors: Sequence[str], layout: str,
 
     # 3. Subtitle with GitHub icon: B Y  [Icon]/ E N D L E S S B R A I N
     sub_y = title_y + int(height * 0.028)
-    part1 = "B Y  "
-    part2 = "/ Manjunadh-Velpuri"
+    part1 = "BY  "
+    part2 = "/Manjunadh-Velpuri"
 
     bbox1 = bg_draw.textbbox((0, 0), part1, font=sub_font)
     tw1 = bbox1[2] - bbox1[0]
@@ -176,7 +192,7 @@ def render_export_image(colors: Sequence[str], layout: str,
         bg_image.paste(gh_icon, (int(cur_x), icon_y), gh_icon)
         cur_x += icon_sz + margin_icon
 
-    # Draw Part 2 ("/ E N D L E S S B R A I N")
+    # Draw Part 2 ("/ MANJUNADH-VELPURI")
     bg_draw.text((cur_x, sub_y - bbox2[1]), part2, fill=col_sub, font=sub_font)
 
     # 4. Hero Sized Floating Palette Artwork (Occupying >= 72% of total image area)
