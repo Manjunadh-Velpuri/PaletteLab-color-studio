@@ -1,7 +1,6 @@
 """
 2D Color Spectrum Add Colors Modal Component.
-Recreates the standalone desktop app's SpectrumCanvas with HSV-based 2D spectrum,
-point dropping, dragging, double-click removal, quick harmony presets, and scrollable chip tray.
+Supports HSV-based 2D spectrum, point dropping, dragging, double-click removal, quick harmony presets, and scrollable chip tray.
 """
 
 from fasthtml.common import *

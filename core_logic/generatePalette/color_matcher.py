@@ -1,34 +1,5 @@
 """
 Color matcher.
-
-METHODOLOGY NOTE (distance metric used for naming)
--------------------------------------------------------------
-match_rgb() / match_hex() -- "what is the closest named color to
-this one" -- now rank candidates using CIEDE2000 (delta_e_2000)
-rather than the CIE76 Euclidean-Lab-distance formula (delta_e_76)
-used previously.
-
-CIE76 is known to distort perceived distance unevenly across the
-color space -- most notably in saturated blues and greens, where
-it under- or over-states how different two colors actually look
-to the eye. CIEDE2000 corrects for this with hue/chroma/lightness
-weighting and is the standard used in professional color-matching
-contexts (ICC profile evaluation, Pantone/paint-industry
-tolerancing, textile and print QA). Concretely: a ΔE00 under ~1.0
-is imperceptible, ~1-2 is perceptible only to a trained eye,
-~2-10 is perceptible at a glance, and above ~10 the colors read
-as clearly different -- this scale is not directly comparable to
-old CIE76 ΔE values, which run larger for the same colors.
-
-delta_e_76() is kept, unchanged, alongside delta_e_2000() below --
-palette_generator.py's internal diversity/spacing heuristics were
-already tuned against the CIE76 scale and are left exactly as-is;
-only the naming lookup in this file changes.
-
-Implementation verified against the published Sharma, Wu & Dalal
-(2005) reference pair: Lab(50, 2.6772, -79.7751) vs.
-Lab(50, 0, -82.7485) -> ΔE00 = 2.0425 (exact match).
--------------------------------------------------------------
 """
 
 import sqlite3

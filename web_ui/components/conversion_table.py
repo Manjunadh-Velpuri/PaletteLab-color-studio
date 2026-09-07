@@ -1,6 +1,6 @@
 """
 Interactive Color Model Conversions Table Component for PaletteLab Web.
-Faithfully supports:
+Supports:
 - Dynamic per-row color matching background with high contrast text.
 - Full row/column selection system:
   - Column checkboxes in header to toggle entire column selection.

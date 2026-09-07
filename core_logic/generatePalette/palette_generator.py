@@ -1,59 +1,5 @@
 """
 Palette generator.
-
-METHODOLOGY NOTE (curated candidate pools)
--------------------------------------------------------------
-Prior to this revision, every style profile drew from a single
-undifferentiated candidate list built by a plain Lab lightness /
-chroma / saturation box-filter over the entire colors.db table,
-then randomly windowed down to ROLE_SAMPLE_SIZE (220) colors at
-each role pick. That produced small, arbitrary, source-blind
-shortlists with no guarantee of even coverage across the color
-space.
-
-This revision splits the database along its actual, meaningful
-provenance instead of treating it as one undifferentiated pool:
-
-    "digital"  -> source == "Meodai"
-                  (36,873 rows) crowd-labelled, full-gamut,
-                  born-digital color names. Entries outside the
-                  vetted "Best Of" subset (preferred == 1) are
-                  additionally required to clear a name_quality
-                  floor of 0.85 -- the real distribution in this
-                  dataset is bimodal (a cluster at 0.90-1.00 and
-                  a smaller cluster at 0.70-0.79), so 0.85 sits
-                  cleanly in the gap between them and drops only
-                  the ~3,000 lowest-confidence auto-generated
-                  names while keeping the other ~28,800 intact.
-
-    "real"     -> source in ("Sherwin-Williams", "Encycolorpedia")
-                  (3,327 rows) physically manufacturable paint
-                  colors and standardized, recognized named
-                  colors. Every row in this tier is already
-                  preferred == 1 with name_quality == 1.0, so no
-                  further filtering is applied.
-
-    "mixed"    -> the original, undifferentiated behavior,
-                  preserved exactly as-is for backward
-                  compatibility with existing callers that don't
-                  pass a domain.
-
-Within "digital" and "real", once a style's box-filter has been
-applied, the surviving pool is reduced to a CURATED_POOL_TARGET
-sized shortlist using farthest-point (max-min) sampling in Lab
-space rather than a blind random cut -- this guarantees the
-shortlist itself is evenly spread across the available color
-space instead of clumping wherever the source data happens to be
-dense. CURATED_POOL_TARGET defaults to 1,200 candidates per
-style/domain combination -- roughly 2.5-4x the prior effective
-shortlist size, and, unlike the prior number, chosen for spread
-rather than as an arbitrary cutoff.
-
-All of this curation happens once, at PaletteGenerator.__init__
-time (same place the original _prepare_candidates cost already
-lived) -- nothing here adds runtime cost to an individual
-generate() call.
--------------------------------------------------------------
 """
 
 import math

@@ -1,7 +1,6 @@
 """
 PaletteLab Web settings and persistence manager.
-Refactored to be headless for web usage. Uses a simple dictionary state.
-In FastHTML, this will be hydrated from session cookies per-request.
+Uses a simple dictionary state hydrated from session cookies per-request.
 """
 from typing import Optional
 

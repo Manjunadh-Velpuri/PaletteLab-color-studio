@@ -1,6 +1,5 @@
 """
 PaletteLab Web UI Dashboard Layout Component.
-Faithfully recreates the standalone luxury desktop UI structure and proportions from Redesign_web_dashboard_UI_2K_202608200250.jpeg.
 """
 
 from fasthtml.common import *
