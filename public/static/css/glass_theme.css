@@ -384,8 +384,8 @@ input[type="checkbox"]:checked::before {
     gap: 6px;
     align-items: center;
     flex-grow: 1;
+    flex-wrap: wrap;
     min-width: 0;
-    overflow: hidden;
 }
 
 .canvas-select {
@@ -414,9 +414,6 @@ input[type="checkbox"]:checked::before {
     font-size: 11px;
     color: var(--text-muted);
     font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     margin-left: 6px;
     flex-grow: 1;
     text-align: center;
