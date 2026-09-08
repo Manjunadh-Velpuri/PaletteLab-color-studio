@@ -45,6 +45,8 @@ def TopBar():
         cls="top-bar"
     )
 
+
+
 def InputSection():
     formats = ["HEX", "RGB", "HSL", "HSV", "CMYK", "LAB"]
     checkboxes = [
@@ -87,12 +89,10 @@ def InputSection():
                     type="file", 
                     accept="image/*", 
                     name="photo", 
-                    style="position: absolute; opacity: 0; width: 0; height: 0;", 
-                    hx_post="/api/extract-photo", 
-                    hx_trigger="change",
-                    hx_encoding="multipart/form-data", 
-                    hx_target="#modal-container", 
-                    hx_swap="outerHTML"
+                    id="photo-file-input",
+                    onclick="this.value=null;",
+                    onchange="if(window.handlePhotoUpload) window.handlePhotoUpload(this);",
+                    style="position: absolute; opacity: 0; width: 0; height: 0;"
                 ),
                 cls="btn", style="cursor: pointer; position: relative;"
             ),

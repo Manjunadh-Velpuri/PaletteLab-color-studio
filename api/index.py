@@ -28,8 +28,8 @@ from web_ui.components.conversion_table import ConversionTable
 app, rt = fast_app(
     secret_key=os.environ.get("SECRET_KEY", "dev-secret-key-palettelab-12345"),
     hdrs=(
-        Link(rel="stylesheet", href="/static/css/glass_theme.css"),
-        Script(src="/static/js/interactions.js")
+        Link(rel="stylesheet", href="/static/css/glass_theme.css?v=2.0"),
+        Script(src="/static/js/interactions.js?v=2.0")
     )
 )
 
@@ -388,22 +388,49 @@ def add_color_modal():
 
 @rt("/api/extract-photo", methods=["POST"])
 async def extract_photo(request):
-    form = await request.form()
-    photo = form.get("photo")
-    if not photo or not hasattr(photo, 'filename') or not photo.filename:
-        return Div(id="modal-container", hx_swap_oob="true")
+    try:
+        form = await request.form()
+        photo = form.get("photo")
+        if not photo or not hasattr(photo, 'filename') or not photo.filename:
+            return Div(id="modal-container", hx_swap_oob="true")
+            
+        content = await photo.read()
+        import base64
+        from PIL import Image
+        from core_logic.extraction.photo_extractor import extract_palette_with_positions
         
-    content = await photo.read()
-    import base64
-    from PIL import Image
-    from core_logic.extraction.photo_extractor import extract_palette_with_positions
-    
-    img = Image.open(io.BytesIO(content)).convert("RGB")
-    extracted = extract_palette_with_positions(img, num_colors=6)
-    img_b64 = base64.b64encode(content).decode("utf-8")
-    
-    modal_content = PhotoExtractModal(img_b64, extracted, filename=photo.filename)
-    return modal_content
+        img = Image.open(io.BytesIO(content)).convert("RGB")
+        extracted = extract_palette_with_positions(img, num_colors=6)
+        
+        # Downsample preview image to max 800px so base64 payload is compact (<80KB)
+        w, h = img.size
+        max_dim = 800
+        if max(w, h) > max_dim:
+            scale = max_dim / max(w, h)
+            img_preview = img.resize((int(w * scale), int(h * scale)), Image.Resampling.LANCZOS)
+        else:
+            img_preview = img
+            
+        buf = io.BytesIO()
+        img_preview.save(buf, format="JPEG", quality=85)
+        img_b64 = base64.b64encode(buf.getvalue()).decode("utf-8")
+        
+        modal_content = PhotoExtractModal(img_b64, extracted, filename=photo.filename)
+        return modal_content
+    except Exception as e:
+        print(f"Error in extract_photo: {e}")
+        return Div(
+            Div(
+                Div(
+                    H3("Photo Extraction Error", style="margin: 0 0 10px 0; color: #ef4444; font-size: 16px;"),
+                    P(f"Could not process image: {str(e)}", style="margin: 0 0 16px 0; font-size: 13px; color: var(--text-main);"),
+                    Button("Close", type="button", cls="btn", onclick="window.closeModal()"),
+                    style="background: var(--panel-bg); padding: 24px; border-radius: 12px; border: 1px solid var(--border-color); max-width: 400px; text-align: center;"
+                ),
+                style="position: fixed; inset: 0; background: rgba(0,0,0,0.75); display: flex; align-items: center; justify-content: center; z-index: 1000;"
+            ),
+            id="modal-container"
+        )
 
 @rt("/api/add-colors-bulk", methods=["POST"])
 async def add_colors_bulk(session, request):
