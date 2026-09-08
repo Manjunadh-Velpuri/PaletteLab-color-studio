@@ -47,10 +47,12 @@ def TopBar():
 
 
 
-def InputSection():
+def InputSection(current_extract_formats=None):
     formats = ["HEX", "RGB", "HSL", "HSV", "CMYK", "LAB"]
+    if current_extract_formats is None:
+        current_extract_formats = formats
     checkboxes = [
-        Label(Input(type="checkbox", checked=(f == "HEX"), name="formats", value=f), f" {f}")
+        Label(Input(type="checkbox", checked=(f in current_extract_formats), name="formats", value=f), f" {f}")
         for f in formats
     ]
     
@@ -78,9 +80,9 @@ def InputSection():
         ),
         Div(
             Button(Icon('magic-wand', size=13), " Extract Ctrl+Enter", type="submit", form="extract-form", cls="btn primary"),
-            Button(Icon('reload', size=13), " Random Palette", type="button", cls="btn", hx_post="/api/random", hx_target="#color-list-container", hx_swap="outerHTML"),
+            Button(Icon('reload', size=13), " Random Palette", type="button", cls="btn", id="random-palette-btn", hx_post="/api/random", hx_target="#color-list-container", hx_swap="outerHTML"),
             Button(
-                Icon('plus', size=13), " 2D Add Color", type="button", hx_post="/api/add-color-modal", hx_target="#modal-container", hx_swap="outerHTML",
+                Icon('plus', size=13), " 2D Add Color", type="button", id="add-color-btn", hx_post="/api/add-color-modal", hx_target="#modal-container", hx_swap="outerHTML",
                 cls="btn"
             ),
             Label(
@@ -94,6 +96,7 @@ def InputSection():
                     onchange="if(window.handlePhotoUpload) window.handlePhotoUpload(this);",
                     style="position: absolute; opacity: 0; width: 0; height: 0;"
                 ),
+                id="photo-extract-wrapper",
                 cls="btn", style="cursor: pointer; position: relative;"
             ),
             cls="action-buttons"
@@ -116,7 +119,7 @@ def Sidebar(color_list_component=None):
         cls="sidebar"
     )
 
-def CanvasArea(canvas_component=None, current_mode="Palette", current_layout="Chips", current_sort="Original", current_labels=None):
+def CanvasArea(canvas_component=None, current_mode="Palette", current_layout="Chips", current_sort="Original", current_labels=None, current_auto_bg=True):
     if current_labels is None:
         current_labels = ["Color Name", "HEX"]
         
@@ -169,7 +172,7 @@ def CanvasArea(canvas_component=None, current_mode="Palette", current_layout="Ch
                 Select(*layout_options, id="layout-select", cls="canvas-select", style="width: 145px;", onchange="updateCanvasSettings()"),
                 Select(*sort_options, id="sort-select", cls="canvas-select", style="width: 215px;", onchange="updateCanvasSettings()"),
                 Button(Icon('reload', 14), type="button", cls="btn", title="Refresh palette preview", onclick="updateCanvasSettings()", style="padding: 6px 10px; display: flex; align-items: center; justify-content: center;"),
-                Div("⭐ Pro-tip: PNG export is more beautiful than this UI display!", cls="canvas-protip"),
+                Div("⭐ Pro-tip: Palette view stays clean in the editor. Export adds the branded finish.", cls="canvas-protip"),
                 cls="canvas-tools-left"
             ),
             Div(
@@ -190,25 +193,29 @@ def CanvasArea(canvas_component=None, current_mode="Palette", current_layout="Ch
         canvas_component,
         # Footer
         Div(
-            Div("⭐ Pro tip: PNG export is more beautiful than this UI display!", style="font-size: 11px; color: var(--text-muted); font-weight: 500;"),
+            Div("⭐ Pro-tip:. Test the colors first, then export a client-ready file.", style="font-size: 11px; color: var(--text-muted); font-weight: 500;"),
             Div(
-                Label(Input(type="checkbox", id="auto-bg-check", onchange="updateCanvasSettings()"), " Auto background"),
-                style="display: flex; gap: 14px; font-size: 12px; font-weight: 500;"
+                Label(
+                    Input(type="checkbox", id="auto-bg-check", checked=current_auto_bg, onchange="updateCanvasSettings()"), 
+                    " Auto background",
+                    style="display: flex; gap: 6px; align-items: center; cursor: pointer;"
+                ),
+                style="display: flex; font-size: 12px; font-weight: 500;"
             ),
             cls="canvas-footer"
         ),
         cls="canvas-area"
     )
 
-def Layout(color_list_component=None, canvas_component=None, status_text="0 active · 0 recognized · Palette (Chips) · Original · [Color Name + HEX]", current_mode="Palette", current_layout="Chips", current_sort="Original", current_labels=None):
+def Layout(color_list_component=None, canvas_component=None, status_text="0 active · 0 recognized · Palette (Chips) · Original · [Color Name + HEX]", current_mode="Palette", current_layout="Chips", current_sort="Original", current_labels=None, current_auto_bg=True, current_extract_formats=None):
     if current_labels is None:
         current_labels = ["Color Name", "HEX"]
     return Div(
         TopBar(),
-        InputSection(),
+        InputSection(current_extract_formats),
         Div(
             Sidebar(color_list_component),
-            CanvasArea(canvas_component, current_mode, current_layout, current_sort, current_labels),
+            CanvasArea(canvas_component, current_mode, current_layout, current_sort, current_labels, current_auto_bg),
             cls="workspace"
         ),
         Div(status_text, cls="status-bar", id="status-bar"),

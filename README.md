@@ -1,5 +1,7 @@
 # PaletteLab - Color Studio 🎨
 
+*For Freelance - UI/UX Designers, Frontend Developers and Professional Design Teams.*
+
 Hi everyone! I am Manjunadh Velpuri, and this is my first real project on GitHub. I made this small tool called PaletteLab to help with colors and palettes. I'm still learning, so there might be a few bugs here and there. Do try it out and feel free to point them out!
 
 ## What it does ✨
@@ -37,6 +39,11 @@ If you want to run this on your own machine, just follow these steps:
 
 ## Why I built this 💡
 I always found it slightly annoying to switch between different tabs just to convert a color code or grab a palette from a photo. So, I decided to build something that puts all these basic features in one place. It was also a great excuse for me to try out Python for web development instead of just simple scripts!
+
+## Two Modes. One Workflow. 🔄
+I wanted the app to feel fast and simple. When you're inside PaletteLab, the interface hides the scaffolding—no watermarks, no messy titles, just raw color data so we can prioritize speed and clarity. 
+
+But when you export your palette as a PNG or SVG, the app automatically generates a professionally structured color matrix for you! It includes the naming, hex values, and a really clean visual hierarchy. It basically gives you a design-system-ready deliverable without having to manually set up the layout yourself.
 
 
 

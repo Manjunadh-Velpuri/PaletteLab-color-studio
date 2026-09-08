@@ -29,7 +29,8 @@ app, rt = fast_app(
     secret_key=os.environ.get("SECRET_KEY", "dev-secret-key-palettelab-12345"),
     hdrs=(
         Link(rel="stylesheet", href="/static/css/glass_theme.css?v=2.0"),
-        Script(src="/static/js/interactions.js?v=2.0")
+        Script(src="/static/js/interactions.js?v=2.0"),
+        Script(src="/static/js/tutorial.js?v=1.0")
     )
 )
 
@@ -177,6 +178,14 @@ def render_canvas(session):
 
 @rt("/")
 def get(session, request):
+    import time
+    # Session Expiration: Reset if inactive for > 2 hours (7200 seconds)
+    last_active = session.get("last_active", 0)
+    current_time = time.time()
+    if current_time - last_active > 7200:
+        session.clear()
+    session["last_active"] = current_time
+
     colors = session.get("colors", [])
     canvas_div = render_canvas(session)
     canvas_div.attrs.pop("hx_swap_oob", None)
@@ -185,16 +194,20 @@ def get(session, request):
     layout = session.get("layout", "Chips")
     sort = session.get("sort", "Original")
     labels = session.get("labels", ["Color Name", "HEX"])
+    auto_bg = session.get("auto_bg", True)
+    extract_formats = session.get("extract_formats", ["HEX", "RGB", "HSL", "HSV", "CMYK", "LAB"])
+    
     labels_str = " + ".join(labels) if labels else "None"
     status_text = f"{len(colors)} active · {len(colors)} recognized · {mode} ({layout}) · {sort} · [{labels_str}]"
     
-    return Title("PaletteLab"), Layout(render_color_list(session), canvas_div, status_text, mode, layout, sort, labels)
+    return Title("PaletteLab"), Layout(render_color_list(session), canvas_div, status_text, mode, layout, sort, labels, auto_bg, extract_formats)
 
 @rt("/api/extract", methods=["POST"])
 async def extract(session, request):
     form = await request.form()
     text_input = form.get("text_input", "")
-    enabled_formats = form.getlist("formats") or ["HEX"]
+    enabled_formats = form.getlist("formats") or ["HEX", "RGB", "HSL", "HSV", "CMYK", "LAB"]
+    session["extract_formats"] = enabled_formats
     
     if not text_input or not text_input.strip():
         return render_color_list(session), render_canvas(session), get_status_bar(session)
