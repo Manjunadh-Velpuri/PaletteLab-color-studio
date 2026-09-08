@@ -188,7 +188,7 @@ def get(session, request):
     labels_str = " + ".join(labels) if labels else "None"
     status_text = f"{len(colors)} active · {len(colors)} recognized · {mode} ({layout}) · {sort} · [{labels_str}]"
     
-    return Title("PaletteLab"), Layout(render_color_list(session), canvas_div, status_text)
+    return Title("PaletteLab"), Layout(render_color_list(session), canvas_div, status_text, mode, layout, sort, labels)
 
 @rt("/api/extract", methods=["POST"])
 async def extract(session, request):

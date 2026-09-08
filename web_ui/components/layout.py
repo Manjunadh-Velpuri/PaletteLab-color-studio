@@ -116,7 +116,10 @@ def Sidebar(color_list_component=None):
         cls="sidebar"
     )
 
-def CanvasArea(canvas_component=None):
+def CanvasArea(canvas_component=None, current_mode="Palette", current_layout="Chips", current_sort="Original", current_labels=None):
+    if current_labels is None:
+        current_labels = ["Color Name", "HEX"]
+        
     if canvas_component is None:
         canvas_component = Div(
             Div("Your palette will appear here", cls="canvas-placeholder"),
@@ -125,37 +128,37 @@ def CanvasArea(canvas_component=None):
         )
         
     layout_options = [
-        Option("Chips", value="Chips", selected=True),
-        Option("Pillars", value="Pillars"),
-        Option("Orbs", value="Orbs"),
-        Option("Ribbons", value="Ribbons"),
-        Option("Collage", value="Collage"),
-        Option("Honeycomb", value="Honeycomb"),
-        Option("Canvas", value="Canvas"),
-        Option("Blocks", value="Blocks")
+        Option("Chips", value="Chips", selected=(current_layout == "Chips")),
+        Option("Pillars", value="Pillars", selected=(current_layout == "Pillars")),
+        Option("Orbs", value="Orbs", selected=(current_layout == "Orbs")),
+        Option("Ribbons", value="Ribbons", selected=(current_layout == "Ribbons")),
+        Option("Collage", value="Collage", selected=(current_layout == "Collage")),
+        Option("Honeycomb", value="Honeycomb", selected=(current_layout == "Honeycomb")),
+        Option("Canvas", value="Canvas", selected=(current_layout == "Canvas")),
+        Option("Blocks", value="Blocks", selected=(current_layout == "Blocks"))
     ]
 
     sort_options = [
-        Option("Sort: Original", value="Original", selected=True),
-        Option("Sort: Luminance (High → Low)", value="Luminance_Desc"),
-        Option("Sort: Luminance (Low → High)", value="Luminance_Asc"),
-        Option("Sort: Hue (Rainbow)", value="Hue"),
-        Option("Sort: Saturation", value="Saturation")
+        Option("Sort: Original", value="Original", selected=(current_sort == "Original")),
+        Option("Sort: Luminance (High → Low)", value="Luminance_Desc", selected=(current_sort == "Luminance_Desc")),
+        Option("Sort: Luminance (Low → High)", value="Luminance_Asc", selected=(current_sort == "Luminance_Asc")),
+        Option("Sort: Hue (Rainbow)", value="Hue", selected=(current_sort == "Hue")),
+        Option("Sort: Saturation", value="Saturation", selected=(current_sort == "Saturation"))
     ]
 
     variant_options = [
-        Option("Mode: Palette", value="Palette", selected=True),
-        Option("Mode: Convert", value="Convert")
+        Option("Mode: Palette", value="Palette", selected=(current_mode == "Palette")),
+        Option("Mode: Convert", value="Convert", selected=(current_mode == "Convert"))
     ]
 
     label_checkboxes = [
-        Label(Input(type="checkbox", checked=True, name="labels", value="Color Name", onchange="updateCanvasSettings()"), " Color Name"),
-        Label(Input(type="checkbox", checked=True, name="labels", value="HEX", onchange="updateCanvasSettings()"), " HEX"),
-        Label(Input(type="checkbox", name="labels", value="RGB", onchange="updateCanvasSettings()"), " RGB"),
-        Label(Input(type="checkbox", name="labels", value="HSL", onchange="updateCanvasSettings()"), " HSL"),
-        Label(Input(type="checkbox", name="labels", value="HSV", onchange="updateCanvasSettings()"), " HSV"),
-        Label(Input(type="checkbox", name="labels", value="CMYK", onchange="updateCanvasSettings()"), " CMYK"),
-        Label(Input(type="checkbox", name="labels", value="LAB", onchange="updateCanvasSettings()"), " LAB"),
+        Label(Input(type="checkbox", checked=("Color Name" in current_labels), name="labels", value="Color Name", onchange="updateCanvasSettings()"), " Color Name"),
+        Label(Input(type="checkbox", checked=("HEX" in current_labels), name="labels", value="HEX", onchange="updateCanvasSettings()"), " HEX"),
+        Label(Input(type="checkbox", checked=("RGB" in current_labels), name="labels", value="RGB", onchange="updateCanvasSettings()"), " RGB"),
+        Label(Input(type="checkbox", checked=("HSL" in current_labels), name="labels", value="HSL", onchange="updateCanvasSettings()"), " HSL"),
+        Label(Input(type="checkbox", checked=("HSV" in current_labels), name="labels", value="HSV", onchange="updateCanvasSettings()"), " HSV"),
+        Label(Input(type="checkbox", checked=("CMYK" in current_labels), name="labels", value="CMYK", onchange="updateCanvasSettings()"), " CMYK"),
+        Label(Input(type="checkbox", checked=("LAB" in current_labels), name="labels", value="LAB", onchange="updateCanvasSettings()"), " LAB"),
     ]
         
     return Div(
@@ -197,13 +200,15 @@ def CanvasArea(canvas_component=None):
         cls="canvas-area"
     )
 
-def Layout(color_list_component=None, canvas_component=None, status_text="0 active · 0 recognized · Palette (Chips) · Original · [Color Name + HEX]"):
+def Layout(color_list_component=None, canvas_component=None, status_text="0 active · 0 recognized · Palette (Chips) · Original · [Color Name + HEX]", current_mode="Palette", current_layout="Chips", current_sort="Original", current_labels=None):
+    if current_labels is None:
+        current_labels = ["Color Name", "HEX"]
     return Div(
         TopBar(),
         InputSection(),
         Div(
             Sidebar(color_list_component),
-            CanvasArea(canvas_component),
+            CanvasArea(canvas_component, current_mode, current_layout, current_sort, current_labels),
             cls="workspace"
         ),
         Div(status_text, cls="status-bar", id="status-bar"),
